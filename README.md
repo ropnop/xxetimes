@@ -9,7 +9,7 @@ I got sick of the setup time and spinning up servers, so I wrote XXEtimes. Its a
 
 See it in action here. I used it to browse home directories and find an unprotected key backup:
 
-[![asciicast](https://asciinema.org/a/122903.png)](https://asciinema.org/a/122903)
+[![asciicast](https://asciinema.org/a/122903.png)](https://asciinema.org/a/122903?autoplay=1)
 
 ## Setting Up
 ```
