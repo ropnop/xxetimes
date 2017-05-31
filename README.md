@@ -77,6 +77,8 @@ It's a bootable ISO you can run locally if you want to test it. It is vulnerable
 
 
 ## Future plans
+The code is pretty hacky but is intended to serve as a PoC for now. I'd like to clean it up and make it more stable eventually.
+
 - [ ] Support history and "up arrow" completion
 - [ ] Save files locally once they're retrieved
 - [ ] Support other OOB methods like FTP
