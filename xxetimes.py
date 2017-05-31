@@ -24,7 +24,7 @@ def start_loop(attackSession, args):
 
 def parseArgs():
     parser = argparse.ArgumentParser(description="Local File Explorer Using XXE DTD Entity Expansion")
-    parser.add_argument('-f', '--requestFile', dest='requestFile', required=True, help="Vulnerable request file with file location marked '**FILE**'")
+    parser.add_argument('-f', '--requestFile', dest='requestFile', required=True, help="Vulnerable request file with {targetFilename}, {xxeHelperServerInterface}, and {xxeHelperServerPort} marked")
     parser.add_argument('-p', '--port', dest='port', default=80, help="Port on target host (eg 80, 443)")       #TODO: implement actually using this
     parser.add_argument('-t', '--targetHost', dest='targetHost', help="Override host header in request file")   #TODO: implement actually using this
     parser.add_argument('-l', '--listenPort', dest='listenPort', default=8000, help="Port for local DTD helper server")
