@@ -77,6 +77,6 @@ It's a bootable ISO you can run locally if you want to test it. It is vulnerable
 
 
 ## Future plans
-[ ] Support history and "up arrow" completion
-[ ] Save files locally once they're retrieved
-[ ] Support other OOB methods like FTP
+- [ ] Support history and "up arrow" completion
+- [ ] Save files locally once they're retrieved
+- [ ] Support other OOB methods like FTP
