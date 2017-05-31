@@ -29,13 +29,14 @@ def parseArgs():
     parser.add_argument('-t', '--targetHost', dest='targetHost', help="Override host header in request file")   #TODO: implement actually using this
     parser.add_argument('-l', '--listenPort', dest='listenPort', default=8000, help="Port for local DTD helper server")
     parser.add_argument('-i', '--listenIP', dest='interface', required=True, help="Bind IP address for local DTD helper server")
+    parser.add_argument('--php', dest='php', default=False, help="Flag to use php's convert.base64 function for files")
     args = parser.parse_args()
     return args
 
 if __name__ == '__main__':
     args = parseArgs()
     print "[+] Starting server...."
-    p = Process(target=startServer, kwargs=dict(ip=args.interface, port=args.listenPort))
+    p = Process(target=startServer, kwargs=dict(ip=args.interface, port=args.listenPort, php=args.php))
     p.start()
     #Hacky way to make sure server is started before jumping in
     #TODO replace with proper messaging

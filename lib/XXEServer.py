@@ -50,7 +50,7 @@ def makeCustomHandlerClass(dtd_name, dtd_contents):
     return xxeHandler #return class
     
 
-def displayContents(contents):
+def displayContents(contents, isBase64=False):
     '''my hacky way to not display duplicate contents. 
     for some reason xml sends back to back requests
     and i only want to show the first one'''
@@ -58,8 +58,11 @@ def displayContents(contents):
     newContents = sha1(contents).hexdigest()
     if LAST_CONTENTS != newContents:
         print "[+] Received response, displaying\n"
-        print urllib.unquote(contents)
-        LAST_CONTENTS = newContents
+        if not isBase64:
+            print urllib.unquote(contents)
+            LAST_CONTENTS = newContents
+        else:
+            print urllib.unquote(contents).decode('base64')
         print "------\n"
     return
     
